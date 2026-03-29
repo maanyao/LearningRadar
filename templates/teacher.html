@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学情雷达 - 教师看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 新增：引入FontAwesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* 辅助样式完全保留，仅适配教育色系，无功能改动 */
+        .badge-normal { background: #d1fae5; color: #065f46; }
+        .badge-stuck { background: #fee2e2; color: #991b1b; }
+        .badge-ahead { background: #dbeafe; color: #1e40af; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-6 max-w-7xl">
+        <!-- 顶部信息栏 -->
+        <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
+            <div class="flex items-center space-x-3">
+                <!-- 仅修改：紫色渐变 → 教育蓝渐变 -->
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <!-- 仅修改：紫色渐变文字 → 教育蓝渐变文字 -->
+                    <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">学情雷达 · 教师看板</h1>
+                    <p class="text-gray-500 text-sm" id="teacherInfo">加载中...</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <!-- 仅修改：聚焦颜色 靛蓝→蓝色 -->
+                <select id="classSelector" class="border border-gray-300 rounded-xl px-3 py-2 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">加载中...</option>
+                </select>
+                <!-- 仅修改：emoji→FontAwesome图标 -->
+                <button id="logoutBtn" class="btn btn-danger"><i class="fa-solid fa-right-from-bracket mr-1"></i>退出登录</button>
+            </div>
+        </div>
+
+        <!-- 标签页 -->
+        <div class="mb-6 border-b border-gray-200">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center">
+                <li class="mr-2">
+                    <!-- 仅修改：靛蓝颜色→蓝色 + emoji→图标 -->
+                    <button id="tabStudents" class="inline-block p-3 rounded-t-lg border-b-2 border-blue-600 text-blue-600"><i class="fa-solid fa-users mr-1"></i>学生状态</button>
+                </li>
+                <li class="mr-2">
+                    <!-- 仅修改：emoji→图标 -->
+                    <button id="tabReport" class="inline-block p-3 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300"><i class="fa-solid fa-chart-line mr-1"></i>班级报告</button>
+                </li>
+                <li class="mr-2">
+                    <!-- 仅修改：emoji→图标 -->
+                    <button id="tabTasks" class="inline-block p-3 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300"><i class="fa-solid fa-list-check mr-1"></i>任务管理</button>
+                </li>
+                <li class="mr-2">
+                    <!-- 仅修改：emoji→图标 -->
+                    <button id="tabClassManage" class="inline-block p-3 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300"><i class="fa-solid fa-school mr-1"></i>班级管理</button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 学生状态面板 -->
+        <div id="studentsPanel">
+            <div class="card mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <!-- 仅修改：emoji→图标 -->
+                    <h2 class="text-xl font-semibold text-gray-800"><i class="fa-solid fa-chart-line mr-1"></i>学生状态总览</h2>
+                    <!-- 仅修改：emoji→图标 -->
+                    <button id="sendReminderBtn" class="btn btn-warning"><i class="fa-solid fa-bullhorn mr-1"></i>一键提醒卡住学生</button>
+                </div>
+                <div style="max-width: 300px; margin: 0 auto;">
+                    <canvas id="statusChart" width="300" height="300"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="flex justify-between items-center mb-4">
+                    <!-- 仅修改：emoji→图标 -->
+                    <h2 class="text-xl font-semibold text-gray-800"><i class="fa-solid fa-list-check mr-1"></i>学生实时状态</h2>
+                    <button id="refreshStudents" class="btn btn-info">刷新</button>
+                </div>
+                <div class="mb-4 flex items-center gap-4">
+                    <label class="text-gray-700 text-sm">按状态筛选：</label>
+                    <!-- 仅修改：聚焦颜色 靛蓝→蓝色 -->
+                    <select id="statusFilter" class="border border-gray-300 rounded-lg px-3 py-1 bg-white focus:ring-2 focus:ring-blue-500">
+                        <option value="all">全部</option>
+                        <option value="normal">正常</option>
+                        <option value="stuck">卡住</option>
+                        <option value="ahead">超前</option>
+                    </select>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>姓名</th>
+                                <th>当前任务</th>
+                                <th>进度</th>
+                                <th>状态</th>
+                                <th>最后步骤时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            <tr><td colspan="6" class="text-center py-4 text-gray-500">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 班级报告面板 -->
+        <div id="reportPanel" class="hidden">
+            <div class="card">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800" id="reportClassName">班级报告</h2>
+                        <p class="text-gray-600">学生总数：<span id="reportStudentCount">0</span> 人</p>
+                    </div>
+                    <!-- 仅修改：emoji→图标 -->
+                    <button id="exportReportBtn" class="btn btn-success"><i class="fa-solid fa-file-export mr-1"></i>导出班级报告</button>
+                </div>
+
+                <div class="mb-8">
+                    <!-- 仅修改：emoji→图标 -->
+                    <h3 class="text-xl font-semibold mb-4"><i class="fa-solid fa-chart-line mr-1"></i>班级活跃度趋势</h3>
+                    <canvas id="reportActivityChart" height="300" style="max-height: 300px;"></canvas>
+                </div>
+
+                <div class="mb-8">
+                    <!-- 仅修改：emoji→图标 -->
+                    <h3 class="text-xl font-semibold mb-4"><i class="fa-solid fa-chart-bar mr-1"></i>任务完成情况</h3>
+                    <div class="overflow-x-auto">
+                        <table class="table">
+                            <thead>
+                                <tr><th>任务名称</th><th>完成人数</th><th>完成率</th><th>平均进度</th></tr>
+                            </thead>
+                            <tbody id="taskCompletionTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <!-- 仅修改：emoji→图标 -->
+                    <h3 class="text-xl font-semibold mb-4"><i class="fa-solid fa-triangle-exclamation mr-1"></i>学生卡点分析</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-semibold text-lg mb-2">任务卡点汇总</h4>
+                            <ul id="taskStuckSummary" class="list-disc pl-5 space-y-1"></ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-lg mb-2">当前卡住的学生</h4>
+                            <div id="stuckRecordsList" class="space-y-2 max-h-96 overflow-y-auto"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <!-- 仅修改：emoji→图标 -->
+                    <h3 class="text-xl font-semibold mb-4"><i class="fa-solid fa-route mr-1"></i>学生学习路径</h3>
+                    <div id="studentLearningPaths" class="space-y-4 max-h-96 overflow-y-auto"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 任务管理面板 -->
+        <div id="tasksPanel" class="hidden">
+            <div class="card">
+                <div class="flex justify-between items-center mb-4">
+                    <!-- 仅修改：emoji→图标 -->
+                    <h2 class="text-xl font-semibold text-gray-800"><i class="fa-solid fa-book mr-1"></i>任务列表</h2>
+                    <div class="flex gap-2">
+                        <button id="newTaskBtn" class="btn btn-success">+ 新建任务</button>
+                        <!-- 仅修改：emoji→图标 -->
+                        <button id="importTasksBtn" class="btn btn-info"><i class="fa-solid fa-file-import mr-1"></i>批量导入任务</button>
+                    </div>
+                </div>
+                <input type="file" id="tasksFileInput" accept=".json" class="hidden">
+                <div class="mb-4 flex flex-wrap gap-2">
+                    <!-- 仅修改：聚焦颜色 靛蓝→蓝色 -->
+                    <input type="text" id="filterKnowledge" placeholder="按知识点筛选" class="border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500">
+                    <select id="filterType" class="border border-gray-300 rounded-lg px-3 py-1 bg-white">
+                        <option value="">全部类型</option>
+                        <option value="basic">基础任务</option>
+                        <option value="advanced">进阶任务</option>
+                    </select>
+                    <button id="applyFilter" class="btn btn-outline">筛选</button>
+                </div>
+                <div id="taskList" class="space-y-4"></div>
+            </div>
+        </div>
+
+        <!-- 班级管理面板 -->
+        <div id="classManagePanel" class="hidden">
+            <div class="card">
+                <div class="flex justify-between items-center mb-4">
+                    <!-- 仅修改：emoji→图标 -->
+                    <h2 class="text-xl font-semibold text-gray-800"><i class="fa-solid fa-school mr-1"></i>班级学生管理</h2>
+                    <div class="flex gap-2">
+                        <button id="addStudentBtn" class="btn btn-success">+ 添加学生</button>
+                        <!-- 仅修改：emoji→图标 -->
+                        <button id="importStudentsBtn" class="btn btn-info"><i class="fa-solid fa-file-import mr-1"></i>批量导入学生</button>
+                        <button id="createClassBtn" class="btn btn-primary">新建班级</button>
+                    </div>
+                </div>
+                <input type="file" id="studentsFileInput" accept=".csv" class="hidden">
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <thead>
+                            <tr><th>姓名</th><th>手机号</th><th>最后活跃</th><th>操作</th></tr>
+                        </thead>
+                        <tbody id="classStudentTableBody">
+                            <tr><td colspan="4" class="text-center py-4 text-gray-500">请先选择一个班级</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新建/编辑任务模态框 -->
+    <div id="taskModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 modal">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-6 max-h-screen overflow-y-auto">
+            <h3 id="modalTitle" class="text-xl font-bold mb-4">新建任务</h3>
+            <input type="hidden" id="editingTaskId">
+            <div class="mb-4"><label class="block text-gray-700 mb-2">任务名称</label><input type="text" id="taskName" class="w-full border border-gray-300 rounded-xl px-4 py-2"></div>
+            <div class="mb-4"><label class="block text-gray-700 mb-2">任务类型</label><select id="taskType" class="w-full border border-gray-300 rounded-xl px-4 py-2"><option value="basic">基础任务</option><option value="advanced">进阶任务</option></select></div>
+            <div class="mb-4"><label class="block text-gray-700 mb-2">知识点</label><input type="text" id="taskKnowledge" class="w-full border border-gray-300 rounded-xl px-4 py-2" placeholder="例如：网络基础"></div>
+            <div class="mb-4"><label class="block text-gray-700 mb-2">步骤列表</label><div id="stepsContainer"></div><button type="button" id="addStepBtn" class="text-blue-600 hover:text-blue-700 mt-2">+ 添加步骤</button></div>
+            <div class="flex justify-end gap-3 mt-4"><button id="cancelModal" class="btn btn-outline">取消</button><button id="saveTaskBtn" class="btn btn-primary">保存</button></div>
+        </div>
+    </div>
+
+    <!-- 添加/编辑学生模态框 -->
+    <div id="studentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 modal">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+            <h3 id="studentModalTitle" class="text-xl font-bold mb-4">添加学生</h3>
+            <input type="hidden" id="editingStudentId">
+            <div class="mb-4"><label class="block text-gray-700 mb-2">姓名</label><input type="text" id="studentName" class="w-full border border-gray-300 rounded-xl px-4 py-2"></div>
+            <div class="mb-4"><label class="block text-gray-700 mb-2">手机号</label><input type="tel" id="studentPhone" class="w-full border border-gray-300 rounded-xl px-4 py-2"></div>
+            <div class="mb-4"><label class="block text-gray-700 mb-2">密码（仅新增时有效）</label><input type="password" id="studentPassword" class="w-full border border-gray-300 rounded-xl px-4 py-2" placeholder="默认为123456"></div>
+            <div class="flex justify-end gap-3"><button id="cancelStudentModal" class="btn btn-outline">取消</button><button id="saveStudentBtn" class="btn btn-primary">保存</button></div>
+        </div>
+    </div>
+
+    <!-- 新建班级模态框 -->
+    <div id="classModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 modal">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+            <h3 class="text-xl font-bold mb-4">新建班级</h3>
+            <div class="mb-4"><label class="block text-gray-700 mb-2">班级名称</label><input type="text" id="className" class="w-full border border-gray-300 rounded-xl px-4 py-2"></div>
+            <div class="flex justify-end gap-3"><button id="cancelClassModal" class="btn btn-outline">取消</button><button id="saveClassBtn" class="btn btn-primary">创建</button></div>
+        </div>
+    </div>
+
+    <!-- 班级报告旧模态框（完全保留原结构） -->
+    <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 modal">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl p-6 m-4" style="max-height: 85vh; display: flex; flex-direction: column;">
+            <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold"><i class="fa-solid fa-chart-bar mr-1"></i>班级课后报告</h3><button id="closeReport" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button></div>
+            <div style="min-height: 200px; max-height: 250px;" class="mb-6"><canvas id="activityChart" style="width:100%;height:100%;"></canvas></div>
+            <div style="flex:1; overflow-y: auto; border-top:1px solid #e5e7eb; padding-top:1rem;"><h4 class="font-semibold text-lg mb-2"><i class="fa-solid fa-route mr-1"></i>学生学习轨迹</h4><div id="reportContent" class="space-y-3"></div></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/teacher.js') }}"></script>
+</body>
+</html>

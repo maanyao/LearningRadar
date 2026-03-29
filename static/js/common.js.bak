@@ -1,0 +1,40 @@
+// static/js/common.js
+
+// Toast 通知
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+// 格式化日期时间
+function formatDateTime(dateStr) {
+    if (!dateStr) return '';
+    if (typeof dateStr === 'string') return dateStr.slice(0, 19);
+    return dateStr;
+}
+
+// 防止 XSS
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+// 加载状态
+function showLoading(element) {
+    if (element) {
+        element.innerHTML = '<div class="spinner mx-auto"></div>';
+    }
+}
+
+// 确认对话框
+function confirmAction(message) {
+    return confirm(message);
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学情雷达 - 登录</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 新增：引入FontAwesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<!-- 仅修改：页面背景改为浅灰色（教育风） -->
+<body class="min-h-screen flex items-center justify-center bg-gray-50">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md transform transition-all">
+        <div class="text-center mb-8">
+            <!-- 仅修改：渐变颜色 靛蓝/紫色 → 教育蓝 -->
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mb-4 shadow-lg">
+                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <!-- 仅修改：文字渐变颜色 靛蓝/紫色 → 教育蓝 -->
+            <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">学情雷达</h1>
+            <p class="text-gray-500 mt-2">职教实训课堂智能伴学系统</p>
+        </div>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-gray-700 text-sm font-medium mb-2">手机号</label>
+                <!-- 仅修改：聚焦样式 靛蓝 → 教育蓝 -->
+                <input type="tel" id="phone" placeholder="请输入手机号" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-medium mb-2">密码</label>
+                <!-- 仅修改：聚焦样式 靛蓝 → 教育蓝 -->
+                <input type="password" id="password" placeholder="请输入密码" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+            </div>
+            <button id="loginBtn" class="btn btn-primary w-full py-3 text-base">登 录</button>
+        </div>
+        
+        <div id="message" class="mt-4 text-center text-sm text-red-500"></div>
+        
+        <div class="mt-6 text-center">
+            <!-- 仅修改：链接颜色 靛蓝 → 教育蓝 -->
+            <a href="/register" class="text-blue-600 hover:text-blue-700 transition">没有账号？立即注册</a>
+        </div>
+    </div>
+
+    <script>
+        // 所有JS逻辑完全未改动，功能100%保留
+        document.getElementById('loginBtn').onclick = async () => {
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const msgDiv = document.getElementById('message');
+            
+            if (!phone || !password) {
+                msgDiv.innerHTML = '请填写手机号和密码';
+                return;
+            }
+            
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ phone, password })
+            });
+            const data = await res.json();
+            
+            if (res.ok && data.success) {
+                window.location.href = data.role === 'teacher' ? '/teacher' : '/student';
+            } else {
+                msgDiv.innerHTML = data.error || '登录失败';
+            }
+        };
+    </script>
+</body>
+</html>
