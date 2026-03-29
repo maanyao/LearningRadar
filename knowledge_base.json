@@ -1,0 +1,349 @@
+{
+  "knowledge_points": [
+    {
+      "name": "办公软件",
+      "basic_tasks": [
+        {
+          "name": "Excel成绩表制作",
+          "steps": [
+            "打开Excel，创建新工作簿，命名为'成绩表'。",
+            "输入表头：学号、姓名、语文、数学、英语、总分、平均分。",
+            "输入至少5条学生成绩数据。",
+            "使用公式计算总分和平均分，设置单元格格式。"
+          ],
+          "steps_config": [
+            {
+              "need_proof": true,
+              "help_text": "启动Excel，点击“新建空白工作簿”，然后使用“另存为”将文件保存为“成绩表.xlsx”。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "在第一行依次输入：学号、姓名、语文、数学、英语、总分、平均分。可以将表头加粗或设置背景色以便区分。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "从第二行开始，输入至少5位学生的成绩（语文、数学、英语）。建议先输入真实数据，方便后续公式计算。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "在总分列使用SUM函数求和，在平均分列使用AVERAGE函数。选中单元格后，双击填充柄可快速应用到所有行。记得设置单元格格式为数字（保留两位小数）。"
+            }
+          ]
+        },
+        {
+          "name": "Word文档排版与样式应用",
+          "steps": [
+            "新建Word文档，输入一篇不少于300字的文章。",
+            "设置标题为'一级标题'样式，正文为'正文'样式。",
+            "插入页眉和页脚，页眉显示文档标题，页脚显示页码。",
+            "插入目录，并设置自动更新。"
+          ],
+          "steps_config": [
+            {
+              "need_proof": true,
+              "help_text": "打开Word，新建空白文档，输入至少300字的文章（可复制粘贴网络文章）。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "选中标题文字，在“开始”选项卡的样式库中选择“标题1”；正文文字选中后选择“正文”。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "双击页眉区域，输入文档标题；在页脚区域，点击“插入”->“页码”，选择合适的位置。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "将光标放在文档开头，点击“引用”->“目录”，选择一个自动目录。完成后，在目录上右键选择“更新域”，可设置自动更新。"
+            }
+          ]
+        }
+      ],
+      "advanced_tasks": [
+        {
+          "name": "Excel数据透视表与图表制作",
+          "steps": [
+            "导入'销售数据'表格，包含日期、区域、产品、销售额字段。",
+            "创建数据透视表，按区域统计销售额总和。",
+            "创建数据透视图，生成柱状图展示各区域销售额对比。",
+            "添加切片器，实现按产品筛选数据。"
+          ],
+          "steps_config": [
+            {
+              "need_proof": true,
+              "help_text": "打开示例数据（或自己制作），确保有“日期”“区域”“产品”“销售额”四列。选中数据区域后，点击“插入”->“数据透视表”。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "在数据透视表字段中，将“区域”拖到行标签，将“销售额”拖到值区域（求和）。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "选中数据透视表，点击“插入”->“数据透视图”，选择柱状图。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "点击数据透视表，在“数据透视表分析”选项卡中点击“插入切片器”，勾选“产品”，即可按产品筛选图表。"
+            }
+          ]
+        },
+        {
+          "name": "PPT演示文稿高级动画设计",
+          "steps": [
+            "创建一份至少5页的PPT，主题为'产品发布会'。",
+            "为每页标题设置'飞入'动画，持续时间0.5秒。",
+            "为图片设置'放大/缩小'强调动画，触发方式为单击。",
+            "设置幻灯片切换效果为'平滑'，并设置自动换片时间。"
+          ],
+          "steps_config": [
+            {
+              "need_proof": true,
+              "help_text": "新建PPT，选择产品发布会主题模板，添加至少5张幻灯片，每页包含标题和图片。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "选中标题文本框，点击“动画”->“飞入”，在“计时”中将持续时间设为0.5秒。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "选中图片，点击“添加动画”->“强调”->“放大/缩小”，在“动画窗格”中将触发方式设为“单击”。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "点击“切换”选项卡，选择“平滑”，并勾选“设置自动换片时间”，输入5秒。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "网络基础",
+      "basic_tasks": [
+        {
+          "name": "配置静态路由",
+          "steps": [
+            "打开Packet Tracer，添加两台路由器和两台PC。",
+            "用直通线连接设备。",
+            "为PC配置IP地址和网关。",
+            "在路由器上配置静态路由。",
+            "测试连通性。"
+          ],
+          "steps_config": [
+            {
+              "need_proof": true,
+              "help_text": "打开Cisco Packet Tracer，从设备区拖入两台路由器（如1841）和两台PC，按网络拓扑摆放。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "使用直通线连接：PC0接路由器0的FastEthernet0/0，路由器0的FastEthernet0/1接路由器1的FastEthernet0/0，路由器1的FastEthernet0/1接PC1。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "点击PC，进入“桌面”->“IP配置”，设置IP地址（如192.168.1.2/24）和网关（192.168.1.1）。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "进入路由器CLI，配置接口IP，然后使用“ip route”命令添加静态路由，指明目的网络和下一跳。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "使用ping命令从PC0 ping PC1，如果成功则表示路由配置正确。"
+            }
+          ]
+        },
+        {
+          "name": "网络故障排查与Ping命令使用",
+          "steps": [
+            "搭建一个小型网络，包含两台PC和一台交换机。",
+            "为PC配置同一网段的IP地址。",
+            "使用ping命令测试两台PC的连通性。",
+            "故意修改一台PC的IP地址造成网络故障，使用ipconfig命令排查。"
+          ],
+          "steps_config": [
+            {
+              "need_proof": true,
+              "help_text": "在Packet Tracer中，拖入两台PC和一台交换机，用直通线连接PC到交换机。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "设置PC0的IP为192.168.1.1/24，PC1的IP为192.168.1.2/24，网关可暂不设置。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "在PC0的命令提示符中输入“ping 192.168.1.2”，观察是否收到回复。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "将PC1的IP改为192.168.2.2，再次ping；然后使用“ipconfig”查看本机IP，使用“ipconfig /renew”恢复（如果使用DHCP），或手动改回。"
+            }
+          ]
+        }
+      ],
+      "advanced_tasks": [
+        {
+          "name": "VLAN配置（进阶）",
+          "steps": [
+            "在基础网络中添加二层交换机。",
+            "创建VLAN 10和VLAN 20。",
+            "将PC划分到不同VLAN。",
+            "配置VLAN间路由。"
+          ],
+          "steps_config": [
+            {
+              "need_proof": true,
+              "help_text": "在Packet Tracer中，添加一台二层交换机（如2960），连接两台PC到交换机。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "进入交换机CLI，使用“vlan 10”和“vlan 20”命令创建VLAN，并命名。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "将PC0的接口划入VLAN 10，PC1的接口划入VLAN 20，使用“switchport access vlan 10”命令。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "添加一台路由器或使用三层交换机，配置子接口（单臂路由）或启用IP路由，实现VLAN间通信。"
+            }
+          ]
+        },
+        {
+          "name": "OSPF动态路由协议配置",
+          "steps": [
+            "搭建由三台路由器组成的网络拓扑。",
+            "为每台路由器的接口配置IP地址。",
+            "启用OSPF进程，通告直连网络。",
+            "验证路由表，测试全网连通性。"
+          ],
+          "steps_config": [
+            {
+              "need_proof": true,
+              "help_text": "使用三台路由器（如1841），按串口或以太网连接，形成一个三角形或链状拓扑。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "为每个接口配置IP地址，例如R0的fa0/0为192.168.1.1/24，fa0/1为10.0.0.1/30等。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "在路由器全局配置模式下，输入“router ospf 1”，然后使用“network 192.168.1.0 0.0.0.255 area 0”宣告直连网络。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "使用“show ip route”查看OSPF学习到的路由，然后从一端PC ping另一端PC，验证连通性。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AIGC",
+      "basic_tasks": [
+        {
+          "name": "AIGC图片生成",
+          "steps": [
+            "打开豆包AI绘图工具。",
+            "输入提示词：'未来城市，赛博朋克风格，高清'。",
+            "生成图片并保存到本地。"
+          ],
+          "steps_config": [
+            {
+              "need_proof": true,
+              "help_text": "访问豆包AI绘图官网或应用，注册登录后进入绘图界面。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "在提示词输入框中输入“未来城市，赛博朋克风格，高清”，可补充细节如“霓虹灯、摩天大楼”。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "点击“生成”按钮，等待图片生成后，右键保存或使用下载按钮。"
+            }
+          ]
+        },
+        {
+          "name": "AIGC文本摘要生成",
+          "steps": [
+            "打开Kimi或文心一言对话界面。",
+            "粘贴一篇不少于500字的科技新闻文章。",
+            "输入指令：'请为这篇文章生成一个200字以内的摘要'。",
+            "对比摘要与原文，评估摘要的准确性。"
+          ],
+          "steps_config": [
+            {
+              "need_proof": true,
+              "help_text": "在浏览器中打开Kimi（kimi.moonshot.cn）或文心一言（yiyan.baidu.com）。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "复制一篇科技新闻全文（不少于500字），粘贴到对话框中。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "输入指令“请为这篇文章生成一个200字以内的摘要”，发送后等待AI回复。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "阅读摘要，看是否抓住了原文关键信息，可以对比原文评价摘要质量。"
+            }
+          ]
+        }
+      ],
+      "advanced_tasks": [
+        {
+          "name": "AIGC视频生成与编辑",
+          "steps": [
+            "使用可灵AI或Runway视频生成工具。",
+            "输入提示词：'一只穿汉服的猫在弹古筝，水墨画风格'。",
+            "生成一段5秒的视频。",
+            "使用剪映添加背景音乐和字幕，导出视频。"
+          ],
+          "steps_config": [
+            {
+              "need_proof": true,
+              "help_text": "访问可灵AI（kling.kuaishou.com）或Runway（runwayml.com），注册后进入视频生成界面。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "在文本框中输入“一只穿汉服的猫在弹古筝，水墨画风格”，可调整参数如时长5秒、风格。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "点击生成，等待视频生成完成，下载到本地。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "打开剪映，导入视频，添加背景音乐和字幕（可用AI自动识别），调整后导出视频。"
+            }
+          ]
+        },
+        {
+          "name": "AI Agent工作流搭建",
+          "steps": [
+            "使用Coze或Dify平台创建AI Agent。",
+            "添加'新闻搜索'插件和'文本摘要'插件。",
+            "设置工作流：输入关键词 -> 搜索新闻 -> 提取摘要 -> 输出结果。",
+            "测试Agent，输入'人工智能最新进展'，查看输出效果。"
+          ],
+          "steps_config": [
+            {
+              "need_proof": true,
+              "help_text": "登录Coze（coze.cn）或Dify（dify.ai），新建一个AI Agent。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "在插件市场中找到并添加“新闻搜索”和“文本摘要”插件，授权使用。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "在工作流设计器中，按顺序连接插件：输入节点->新闻搜索->文本摘要->输出节点。"
+            },
+            {
+              "need_proof": true,
+              "help_text": "保存并发布Agent，然后在对话框中输入“人工智能最新进展”，观察是否返回摘要结果。"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
